@@ -4,10 +4,37 @@
 #include "DistributionFunctionLibrary.h"
 
 #include "Curves/CurveVector.h"
+#include "Kismet/KismetMathLibrary.h"
 
 FTransform UDistributionFunctionLibrary::GetSingleInCircle(int32 Value)
 {
 	return {};
+}
+
+TArray<FTransform> UDistributionFunctionLibrary::TransformsFromDistribution(const FDistributionData& InDistribution)
+{
+	TArray<FTransform> OutTransforms;
+	for (const FVector Point : InDistribution.Points)
+	{
+		OutTransforms.Add(FTransform(Point));
+	}
+	return OutTransforms;
+}
+
+void UDistributionFunctionLibrary::RotateTransformsToPointAtLocation(TArray<FTransform>& Transforms, const FVector Location)
+{
+	for (auto& Transform : Transforms)
+	{
+		Transform.SetRotation(FQuat(UKismetMathLibrary::FindLookAtRotation(Transform.GetLocation(), Location)));
+	}
+}
+
+void UDistributionFunctionLibrary::RotateTransformsToPointFromLocation(TArray<FTransform>& Transforms, const FVector Location)
+{
+	for (auto& Transform : Transforms)
+	{
+		Transform.SetRotation(FQuat(UKismetMathLibrary::FindLookAtRotation(Location, Transform.GetLocation())));
+	}
 }
 
 void UDistributionFunctionLibrary::DrawDistribution(const UObject* WorldContextObject, const FDistributionData& Distribution,

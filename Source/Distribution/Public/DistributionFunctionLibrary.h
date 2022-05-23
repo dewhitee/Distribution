@@ -30,10 +30,10 @@ struct FDistributionData
 		: Points(InPoints)
 		, Type(InType) {}
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<FVector> Points;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	EDistributionDataType Type = EDistributionDataType::None;
 };
 
@@ -117,6 +117,15 @@ class DISTRIBUTION_API UDistributionFunctionLibrary : public UBlueprintFunctionL
 public:
 	UFUNCTION(BlueprintCallable, Category=Distribution)
 	static FTransform GetSingleInCircle(int32 Value);
+
+	UFUNCTION(BlueprintCallable, Category=Distribution)
+	static TArray<FTransform> TransformsFromDistribution(const FDistributionData& InDistribution);
+
+	UFUNCTION(BlueprintCallable, Category=Distribution)
+	static void RotateTransformsToPointAtLocation(UPARAM(ref) TArray<FTransform>& Transforms, const FVector Location);
+
+	UFUNCTION(BlueprintCallable, Category=Distribution)
+	static void RotateTransformsToPointFromLocation(UPARAM(ref) TArray<FTransform>& Transforms, const FVector Location);
 
 	UFUNCTION(BlueprintCallable, Category=Distribution, meta=(WorldContext="WorldContextObject"))
 	static void DrawDistribution(const UObject* WorldContextObject, const FDistributionData& Distribution,
