@@ -7,8 +7,6 @@
 #include "GameFramework/Actor.h"
 #include "DistributionDebugActor.generated.h"
 
-enum class EDistributionDataType : uint8;
-
 UCLASS()
 class DISTRIBUTION_API ADistributionDebugActor : public AActor
 {

@@ -21,7 +21,7 @@ enum class EDistributionDataType : uint8
 };
 
 USTRUCT(BlueprintType)
-struct FDistributionData
+struct DISTRIBUTION_API FDistributionData
 {
 	GENERATED_BODY()
 
@@ -38,69 +38,69 @@ struct FDistributionData
 };
 
 USTRUCT(BlueprintType)
-struct FDistributionSunflowerArgs
+struct DISTRIBUTION_API FDistributionSunflowerArgs
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 AdjustedSize;
+	int32 AdjustedSize = 1;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector Location;
+	FVector Location = FVector::ZeroVector;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Alpha;
+	float Alpha = 1.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Radius;
+	float Radius = 1.f;
 };
 
 USTRUCT(BlueprintType)
-struct FDistributionSpiralArgs
+struct DISTRIBUTION_API FDistributionSpiralArgs
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 AdjustedSize;
+	int32 AdjustedSize = 1;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector Location;
+	FVector Location = FVector::ZeroVector;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float SpiralCoefficient;
+	float SpiralCoefficient = 1.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float SpiralDensity;
+	float SpiralDensity = 1.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float SpiralSize;
+	float SpiralSize = 1.f;
 };
 
 USTRUCT(BlueprintType)
-struct FDistributionCircularArgs
+struct DISTRIBUTION_API FDistributionCircularArgs
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 AdjustedSize;
+	int32 AdjustedSize = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector Location;
+	FVector Location = FVector::ZeroVector;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Radius;
+	float Radius = 1.f;
 };
 
 USTRUCT(BlueprintType)
-struct FDistributionCustomCurveArgs
+struct DISTRIBUTION_API FDistributionCustomCurveArgs
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 AdjustedSize;
+	int32 AdjustedSize = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector Location;
+	FVector Location = FVector::ZeroVector;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCurveVector* CustomVectorCurve = nullptr;
@@ -131,22 +131,22 @@ public:
 	static void DrawDistribution(const UObject* WorldContextObject, const FDistributionData& Distribution,
 		const FColor Color = FColor::Blue, float Lifetime = 5.f);
 
-	UFUNCTION(BlueprintCallable, Category=Distribution)
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category=Distribution)
 	static FDistributionData DistributeSunflower(const FDistributionSunflowerArgs& Args);
 
-	UFUNCTION(BlueprintCallable, Category=Distribution)
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category=Distribution)
 	static FDistributionData DistributeSpiral(const FDistributionSpiralArgs& Args);
 
-	UFUNCTION(BlueprintCallable, Category=Distribution)
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category=Distribution)
 	static FDistributionData DistributeCircular(const FDistributionCircularArgs& Args);
 	
-	UFUNCTION(BlueprintCallable, Category=Distribution)
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category=Distribution)
 	static FDistributionData DistributeCircularUniform(const FDistributionCircularArgs& Args);
 
-	UFUNCTION(BlueprintCallable, Category=Distribution)
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category=Distribution)
 	static FDistributionData DistributeCircularUniform2(const FDistributionCircularArgs& Args);
 
-	UFUNCTION(BlueprintCallable, Category=Distribution)
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category=Distribution)
 	static FDistributionData DistributeCustomCurve(const FDistributionCustomCurveArgs& Args);
 
 private:

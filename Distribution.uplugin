@@ -18,7 +18,7 @@
 		{
 			"Name": "Distribution",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "PreDefault"
 		}
 	]
 }
