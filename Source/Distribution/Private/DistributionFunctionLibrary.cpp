@@ -178,6 +178,19 @@ FDistributionData UDistributionFunctionLibrary::DistributeCustomCurve(const FDis
 	return FDistributionData(OutLocations, EDistributionDataType::CustomCurve);
 }
 
+FDistributionData UDistributionFunctionLibrary::DistributeCone(const FDistributionConeArgs& Args)
+{
+	TArray<FVector> OutLocations;
+	OutLocations.Reserve(Args.Count);
+
+	for (int32 i = 0; i < Args.Count; i++)
+	{
+		OutLocations.Add(UKismetMathLibrary::RandomUnitVectorInConeInDegrees(Args.Direction, Args.HalfAngleInDegrees));
+	}
+	
+	return FDistributionData(OutLocations, EDistributionDataType::Cone);
+}
+
 float UDistributionFunctionLibrary::GetPolarRadius(int32 Index, const float Count, const int32 BoundaryPoints)
 {
 	return Index > Count - BoundaryPoints

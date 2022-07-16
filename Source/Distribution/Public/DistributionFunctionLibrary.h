@@ -17,7 +17,8 @@ enum class EDistributionDataType : uint8
 	Circular,
 	CircularUniform,
 	CircularUniform2,
-	CustomCurve
+	CustomCurve,
+	Cone
 };
 
 USTRUCT(BlueprintType)
@@ -106,6 +107,21 @@ struct DISTRIBUTION_API FDistributionCustomCurveArgs
 	UCurveVector* CustomVectorCurve = nullptr;
 };
 
+USTRUCT(BlueprintType)
+struct DISTRIBUTION_API FDistributionConeArgs
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Count = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector Direction = FVector::ZeroVector;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float HalfAngleInDegrees = 15.f;
+};
+
 /**
  * 
  */
@@ -148,6 +164,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category=Distribution)
 	static FDistributionData DistributeCustomCurve(const FDistributionCustomCurveArgs& Args);
+
+	UFUNCTION(BlueprintPure, Category=Distribution)
+	static FDistributionData DistributeCone(const FDistributionConeArgs& Args);
 
 private:
 	static float GetPolarRadius(int32 Index, const float Count, const int32 BoundaryPoints);
