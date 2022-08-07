@@ -24,7 +24,7 @@ void ADistributionDebugActor::PostLoad()
 	Super::PostLoad();
 	if (!TimerHandle.IsValid())
 	{
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ADistributionDebugActor::Visualize, Lifetime, true);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ADistributionDebugActor::Visualize, GetWorld()->GetDeltaSeconds(), true);
 	}
 }
 
@@ -33,7 +33,7 @@ void ADistributionDebugActor::PostActorCreated()
 	Super::PostActorCreated();
 	if (!TimerHandle.IsValid())
 	{
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ADistributionDebugActor::Visualize, Lifetime, true);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ADistributionDebugActor::Visualize, GetWorld()->GetDeltaSeconds(), true);
 	}
 }
 
@@ -43,7 +43,20 @@ void ADistributionDebugActor::OnConstruction(const FTransform& Transform)
 	if (TimerHandle.IsValid())
 	{
 		GetWorldTimerManager().ClearTimer(TimerHandle);
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ADistributionDebugActor::Visualize, Lifetime, true);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ADistributionDebugActor::Visualize, GetWorld()->GetDeltaSeconds(), true);
+	}
+}
+
+void ADistributionDebugActor::RestartVisualization()
+{
+	if (TimerHandle.IsValid())
+	{
+		GetWorldTimerManager().ClearTimer(TimerHandle);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ADistributionDebugActor::Visualize, GetWorld()->GetDeltaSeconds(), true);
+	}
+	else
+	{
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ADistributionDebugActor::Visualize, GetWorld()->GetDeltaSeconds(), true);
 	}
 }
 
@@ -53,6 +66,13 @@ void ADistributionDebugActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
+
+#ifndef VISUALIZE
+#define VISUALIZE(distribution) \
+	case EDistributionDataType::##distribution##: \
+		UDistributionFunctionLibrary::DrawDistribution(this, UDistributionFunctionLibrary::Distribute##distribution##(##distribution##), Color, Lifetime); \
+		break;
+#endif
 
 void ADistributionDebugActor::Visualize()
 {
@@ -80,7 +100,10 @@ void ADistributionDebugActor::Visualize()
 	case EDistributionDataType::CustomCurve:
 		UDFL::DrawDistribution(this, UDFL::DistributeCustomCurve(CustomCurve), Color, Lifetime);
 		break;
+	VISUALIZE(Cone);
+	VISUALIZE(Ring);
 	default: ;
 	}
 }
 
+#undef VISUALIZE

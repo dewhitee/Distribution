@@ -185,10 +185,51 @@ FDistributionData UDistributionFunctionLibrary::DistributeCone(const FDistributi
 
 	for (int32 i = 0; i < Args.Count; i++)
 	{
-		OutLocations.Add(UKismetMathLibrary::RandomUnitVectorInConeInDegrees(Args.Direction, Args.HalfAngleInDegrees));
+		FVector Loc = UKismetMathLibrary::RandomUnitVectorInConeInDegrees(Args.Direction, Args.HalfAngleInDegrees) * Args.Distance;
+		Loc.X += Args.Location.X;
+		Loc.Y += Args.Location.Y;
+		Loc.Z += Args.Location.Z;
+		
+		OutLocations.Add(Loc);
 	}
 	
 	return FDistributionData(OutLocations, EDistributionDataType::Cone);
+}
+
+FDistributionData UDistributionFunctionLibrary::DistributeRing(const FDistributionRingArgs& Args)
+{
+	TArray<FVector> OutLocations;
+	OutLocations.Reserve(Args.Count);
+
+	//const float R1 = Args.InnerRadius;
+	//const float R2 = Args.OuterRadius;
+	
+	const float r1 = Args.OuterRadius;
+	const float r2 = /*R2 / R1*/Args.InnerRadius;
+	for (int32 i = 1; i <= Args.Count; i++)
+	{
+		const float Theta = (2.f * PI) * FMath::RandRange(0.0, 1.0);
+		//const float U = FMath::RandRange(0.0, 1.0) + FMath::RandRange(0.0, 1.0);
+		//float r = U > 1 ? 2 - U : U;
+		//r = r < r2 ? r2 + r * ((R1 - R2) / R2) : r;
+
+		const float U = 2.0 / (r1 * r1 - r2 * r2);
+		const float r = FMath::Sqrt(2.0 * FMath::RandRange(0.0, 1.0) / U + r2 * r2);
+		
+		
+		//const float Dist = FMath::Sqrt(
+		//	i * (FMath::Pow(Args.OuterRadius, 2) - FMath::Pow(Args.InnerRadius, 2) + FMath::Pow(Args.InnerRadius, 2))
+		//);
+		
+		FVector SpawnLoc = FVector(
+			Args.Location.X + r * FMath::Cos(Theta),
+			Args.Location.Y + r * FMath::Sin(Theta),
+			Args.Location.Z);
+
+		OutLocations.Add(SpawnLoc);
+	}
+	
+	return FDistributionData(OutLocations, EDistributionDataType::Ring);
 }
 
 float UDistributionFunctionLibrary::GetPolarRadius(int32 Index, const float Count, const int32 BoundaryPoints)

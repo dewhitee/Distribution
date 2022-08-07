@@ -18,7 +18,8 @@ enum class EDistributionDataType : uint8
 	CircularUniform,
 	CircularUniform2,
 	CustomCurve,
-	Cone
+	Cone,
+	Ring
 };
 
 USTRUCT(BlueprintType)
@@ -116,10 +117,37 @@ struct DISTRIBUTION_API FDistributionConeArgs
 	int32 Count = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector Direction = FVector::ZeroVector;
+	FVector Location = FVector::ZeroVector;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector Direction = FVector::ZAxisVector * 1.f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(ClampMin=0, ClampMax=180))
 	float HalfAngleInDegrees = 15.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Distance = 100.f;
+};
+
+/**
+ * @see https://en.wikipedia.org/wiki/Annulus_%28mathematics%29
+ */
+USTRUCT(BlueprintType)
+struct DISTRIBUTION_API FDistributionRingArgs
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Count = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector Location = FVector::ZeroVector;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float InnerRadius = 128.f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float OuterRadius = 256.f;
 };
 
 /**
@@ -167,6 +195,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category=Distribution)
 	static FDistributionData DistributeCone(const FDistributionConeArgs& Args);
+	
+	UFUNCTION(BlueprintPure, Category=Distribution)
+	static FDistributionData DistributeRing(const FDistributionRingArgs& Args);
 
 private:
 	static float GetPolarRadius(int32 Index, const float Count, const int32 BoundaryPoints);

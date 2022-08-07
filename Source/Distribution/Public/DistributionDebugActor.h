@@ -23,7 +23,7 @@ public:
 	FLinearColor PointColor = FLinearColor::Blue;
 	
 	UPROPERTY(EditAnywhere, Category=Distribution)
-	float Lifetime = 5.f;
+	float Lifetime = 0.01;
 	
 	UPROPERTY(EditAnywhere, Category=Distribution, meta=(EditCondition="DistributionType == EDistributionDataType::Sunflower"))
 	FDistributionSunflowerArgs Sunflower;
@@ -36,6 +36,12 @@ public:
 	
 	UPROPERTY(EditAnywhere, Category=Distribution, meta=(EditCondition="DistributionType == EDistributionDataType::CustomCurve"))
 	FDistributionCustomCurveArgs CustomCurve;
+	
+	UPROPERTY(EditAnywhere, Category=Distribution, meta=(EditCondition="DistributionType == EDistributionDataType::Cone"))
+	FDistributionConeArgs Cone;
+
+	UPROPERTY(EditAnywhere, Category=Distribution, meta=(EditCondition="DistributionType == EDistributionDataType::Ring"))
+	FDistributionRingArgs Ring;
 
 	FTimerHandle TimerHandle;
 
@@ -45,6 +51,9 @@ protected:
 	virtual void PostLoad() override;
 	virtual void PostActorCreated() override;
 	virtual void OnConstruction(const FTransform& Transform) override;
+
+	UFUNCTION(CallInEditor, Category=Distribution)
+	void RestartVisualization();
 
 public:	
 	// Called every frame
