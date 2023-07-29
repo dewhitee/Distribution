@@ -196,6 +196,57 @@ FDistributionData UDistributionFunctionLibrary::DistributeCone(const FDistributi
 	return FDistributionData(OutLocations, EDistributionDataType::Cone);
 }
 
+FDistributionData UDistributionFunctionLibrary::DistributeConeUniform(const FDistributionConeArgs& Args)
+{
+	TArray<FVector> OutLocations;
+	OutLocations.Reserve(Args.Count);
+	
+	const float Angle = (Args.HalfAngleInDegrees * 2.f) / Args.Count;
+
+	for (int32 i = 0; i < Args.Count; i++)
+	{
+		const auto Theta = Angle * i;
+		FVector Loc = FVector(
+			Args.Location.X + Args.Distance * FMath::Cos(Theta),
+			Args.Location.Y + Args.Distance * FMath::Sin(Theta),
+			Args.Location.Z);
+
+		
+		/*float const RandU = FMath::FRand();
+		float const RandV = FMath::FRand();
+
+		// Get spherical coords that have an even distribution over the unit sphere
+		// Method described at http://mathworld.wolfram.com/SpherePointPicking.html	
+		float Theta = 2.f * UE_PI * RandU;
+		float Phi = FMath::Acos((2.f * RandV) - 1.f);
+
+		// restrict phi to [0, ConeHalfAngleRad]
+		// this gives an even distribution of points on the surface of the cone
+		// centered at the origin, pointing upward (z), with the desired angle
+		Phi = FMath::Fmod(Phi, Args.HalfAngleInDegrees);
+
+		// get axes we need to rotate around
+		FMatrix const DirMat = FRotationMatrix(Args.Direction.Rotation());
+		// note the axis translation, since we want the variation to be around X
+		FVector const DirZ = DirMat.GetScaledAxis( EAxis::X );		
+		FVector const DirY = DirMat.GetScaledAxis( EAxis::Y );
+
+		FVector Loc = Args.Direction.RotateAngleAxis(Phi * 180.f / UE_PI, DirY);
+		Loc = Loc.RotateAngleAxis(Theta * 180.f / UE_PI, DirZ);
+
+		// ensure it's a unit vector (might not have been passed in that way)
+		Loc = Loc.GetSafeNormal();*/
+
+		Loc.X += Args.Location.X;
+		Loc.Y += Args.Location.Y;
+		Loc.Z += Args.Location.Z;
+		
+		OutLocations.Add(Loc);
+	}
+	
+	return FDistributionData(OutLocations, EDistributionDataType::ConeUniform);
+}
+
 FDistributionData UDistributionFunctionLibrary::DistributeRing(const FDistributionRingArgs& Args)
 {
 	TArray<FVector> OutLocations;

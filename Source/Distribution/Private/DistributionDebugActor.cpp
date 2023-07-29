@@ -100,6 +100,9 @@ void ADistributionDebugActor::Visualize()
 	case EDistributionDataType::CustomCurve:
 		UDFL::DrawDistribution(this, UDFL::DistributeCustomCurve(CustomCurve), Color, Lifetime);
 		break;
+	case EDistributionDataType::ConeUniform:
+		UDFL::DrawDistribution(this, UDFL::DistributeConeUniform(Cone), Color, Lifetime);
+		break;	
 	VISUALIZE(Cone);
 	VISUALIZE(Ring);
 	default: ;

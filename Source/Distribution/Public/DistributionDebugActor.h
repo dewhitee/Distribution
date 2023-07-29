@@ -37,7 +37,7 @@ public:
 	UPROPERTY(EditAnywhere, Category=Distribution, meta=(EditCondition="DistributionType == EDistributionDataType::CustomCurve"))
 	FDistributionCustomCurveArgs CustomCurve;
 	
-	UPROPERTY(EditAnywhere, Category=Distribution, meta=(EditCondition="DistributionType == EDistributionDataType::Cone"))
+	UPROPERTY(EditAnywhere, Category=Distribution, meta=(EditCondition="DistributionType == EDistributionDataType::Cone || DistributionType == EDistributionDataType::ConeUniform"))
 	FDistributionConeArgs Cone;
 
 	UPROPERTY(EditAnywhere, Category=Distribution, meta=(EditCondition="DistributionType == EDistributionDataType::Ring"))

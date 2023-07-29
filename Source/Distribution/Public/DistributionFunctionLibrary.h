@@ -19,6 +19,7 @@ enum class EDistributionDataType : uint8
 	CircularUniform2,
 	CustomCurve,
 	Cone,
+	ConeUniform,
 	Ring
 };
 
@@ -195,6 +196,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category=Distribution)
 	static FDistributionData DistributeCone(const FDistributionConeArgs& Args);
+
+	UFUNCTION(BlueprintPure, Category=Distribution)
+	static FDistributionData DistributeConeUniform(const FDistributionConeArgs& Args);
 	
 	UFUNCTION(BlueprintPure, Category=Distribution)
 	static FDistributionData DistributeRing(const FDistributionRingArgs& Args);
